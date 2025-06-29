@@ -157,7 +157,7 @@ async function sendWebhook(title, description, color) {
 }
 
 async function startSniper() {
-    console.log('[*] Turbo Sniper başlatıldı...');
+    console.log('Sniper Starting');
 
     const queue = async.queue(async (_, done) => {
         if (!claimed) await claimVanity();
