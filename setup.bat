@@ -1,10 +1,10 @@
 @echo off
 cd /d "%~dp0"
 
-:: Gerekli modülleri kur
+:: Install Modules
 npm install async undici fast-json-stringify >nul 2>&1
 
-:: sniper.js dosyasını çalıştır
+:: Run the Sniper
 node jsniper.js
 
 pause
