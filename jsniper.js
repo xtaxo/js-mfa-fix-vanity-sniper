@@ -9,7 +9,7 @@ const config = {
     vanityCode: 'YOUR_VANITY',
     mfaPassword: 'YOUR_PASSWORD',
     webhookUrl: 'YOUR_WEBHOOK_URL',
-    threadCount: 1000,
+    threadCount: 300,
     requestInterval: 5,
     maxRetries: 10
 };
