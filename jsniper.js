@@ -4,37 +4,37 @@ const { performance } = require('perf_hooks');
 const fastJson = require('fast-json-stringify');
 
 const config = {
-    selfToken: 'YOUR_ACCOUNT_TOKEN',
-    guildId: 'YOUR_GUILD_ID',
-    vanityCode: 'YOUR_VANITY',
-    mfaPassword: 'YOUR_PASSWORD',
-    webhookUrl: 'YOUR_WEBHOOK_URL',
-    threadCount: 300,
-    requestInterval: 5,
-    maxRetries: 10
+    selfToken: 'YOUR_ACCOUNT_TOKEN',
+    guildId: 'YOUR_GUILD_ID',
+    vanityCode: 'YOUR_VANITY',
+    mfaPassword: 'YOUR_PASSWORD',
+    webhookUrl: 'YOUR_WEBHOOK_URL',
+    threadCount: 300,
+    requestInterval: 5,
+    maxRetries: 10
 };
 
-let mfaToken = '';
+let mfaToken = '';  // don't touch it, the code will refresh its own
 let claimed = false;
 let reqCount = 0;
 let startTime = performance.now();
 let webhookSent = false;
 
 const vanityPayloadStringify = fastJson({
-    type: 'object',
-    properties: {
-        code: { type: 'string' }
-    },
-    required: ['code']
+    type: 'object',
+    properties: {
+        code: { type: 'string' }
+    },
+    required: ['code']
 });
 
 const mfaPayloadStringify = fastJson({
-    type: 'object',
-    properties: {
-        ticket: { type: 'string' },
-        mfa_type: { type: 'string' },
-        data: { type: 'string' }
-    },
+    type: 'object',
+    properties: {
+        ticket: { type: 'string' },
+        mfa_type: { type: 'string' },
+        data: { type: 'string' }
+     },
     required: ['ticket', 'mfa_type', 'data']
 });
 
@@ -95,7 +95,7 @@ async function claimVanity(retryCount = 0) {
         if (statusCode === 200 && !claimed) {
             claimed = true;
             const total = Math.round(performance.now() - startTime);
-            const msg = `✅ Claimed \`${config.vanityCode}\`\n🔁 Attempts: ${reqCount}\n⏱️ Total: ${total}ms\n🚀 Last ping: ${Math.round(elapsed)}ms`;
+            const msg = `✅ Claimed \`${config.vanityCode}\`\n Last ping: ${Math.round(elapsed)}ms`;
             await sendWebhook('💥 Claimed!', msg, 0x00FF00);
             console.log(msg);
         } else if (statusCode === 401) {
@@ -169,7 +169,7 @@ async function startSniper() {
         if (!claimed) await claimVanity();
     }, config.threadCount);
 
-    queue.error(err => console.warn('[!] Kuyruk hatası:', err.message));
+    queue.error(err => console.warn('[!] Error:', err.message));
 
     setInterval(() => {
         if (!claimed) {
